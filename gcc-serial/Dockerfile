@@ -43,4 +43,22 @@ RUN apt-get update &&       \
         libmetis-dev        \
         libparmetis-dev
 
+ENV SOFTWARE_ROOT=/software
+RUN mkdir $SOFTWARE_ROOT
+
+# TRILINOS
+RUN cd $SOFTWARE_ROOT && \
+    mkdir trilinos && cd trilinos && \
+    git clone --filter=blob:none https://github.com/trilinos/trilinos source
+
+RUN mkdir $SOFTWARE_ROOT/trilinos/build
+
+ADD do-cmake-trilinos.sh ${SOFTWARE_ROOT}/trilinos/build/do-cmake.sh
+
+RUN cd $SOFTWARE_ROOT/trilinos/build && \
+    chmod u+x do-cmake.sh && ./do-cmake.sh
+
+RUN cd $SOFTWARE_ROOT/trilinos/build && \
+    make -j16 install
+
 CMD [ "/bin/bash" ]
