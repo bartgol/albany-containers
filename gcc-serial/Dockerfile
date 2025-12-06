@@ -61,4 +61,9 @@ RUN cd $SOFTWARE_ROOT/trilinos/build && \
 RUN cd $SOFTWARE_ROOT/trilinos/build && \
     make -j16 install
 
+ENV TRILINOS_ROOT=${SOFTWARE_ROOT}/trilinos/install
+
+RUN useradd -ms /bin/bash runner
+USER runner
+
 CMD [ "/bin/bash" ]
